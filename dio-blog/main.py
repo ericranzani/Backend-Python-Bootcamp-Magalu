@@ -1,5 +1,6 @@
 from datetime import datetime, timezone
-from fastapi import FastAPI
+from fastapi import FastAPI, status
+from pydantic import BaseModel
 
 app = FastAPI()
 
@@ -10,9 +11,21 @@ fake_db = [
     {'title': f'Internacionalizando uma app Starlett', 'date': datetime.now(timezone.utc), "published": False},
 ]
 
+class Post(BaseModel):
+    title: str
+    date: datetime = datetime.now(timezone.utc)
+    published: bool = False
+    author: str | None = None
+
+# request body
+@app.post('/posts/', status_code=status.HTTP_201_CREATED)
+def create_post(post: Post):
+    fake_db.append(post.model_dump())
+    return post
+
 # query parameters
-@app.get('/posts')
-def read_posts( published: bool, skip: int = 0, limit: int = len(fake_db)):
+@app.get('/posts/')
+def read_posts(published: bool, limit: int, skip: int = 0):
     # return fake_db[skip: skip + limit] # simpler version - precisa tirar o valor boolean
     return [post for post in fake_db[skip: skip + limit] if post['published'] is published]
 
