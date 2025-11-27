@@ -1,6 +1,4 @@
-from datetime import datetime, timezone
-from typing import Annotated
-from fastapi import Cookie, Response, status, Header, APIRouter
+from fastapi import Response, status, APIRouter
 from schemas.post import PostIn
 from views.post import PostOut
 
@@ -20,14 +18,4 @@ def read_posts(
     limit: int, 
     skip: int = 0
 ):
-    tail = skip + limit
-
-# path parameters
-@router.get('/{framework}', response_model=PostOut)
-def read_framework_posts(framework: str):
-    return {
-        "posts": [
-            {'title': f'Criando uma aplicação com {framework}', 'date': datetime.now(timezone.utc)}, 
-            {'title': f'Internacionalizando uma app {framework}', 'date': datetime.now(timezone.utc)},
-        ]
-    }
+    return []

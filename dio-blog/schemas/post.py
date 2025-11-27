@@ -1,9 +1,9 @@
-from datetime import datetime, timezone
+from datetime import datetime
 from pydantic import BaseModel
 
 
 class PostIn(BaseModel):
     title: str
-    date: datetime = datetime.now(timezone.utc)
+    content: str
+    published_at: datetime | None = None
     published: bool = False
-    author: str | None = None

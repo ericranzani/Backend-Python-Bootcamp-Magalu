@@ -11,11 +11,12 @@ metadata = sa.MetaData()
 
 # checagem para evitar problemas com o FastAPI
 engine = sa.create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
-metadata.create_all(engine)
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    from models.post import posts  # noqa
     await database.connect()
+    metadata.create_all(engine)
     yield
     await database.disconnect()
 
